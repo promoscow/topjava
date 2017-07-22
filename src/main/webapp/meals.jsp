@@ -11,23 +11,42 @@
 <%@ taglib prefix="fn" uri="http://topjava.javawebinar.ru/functions" %>
 <html>
 <head>
-    <title>Meals</title>
+    <title>Meal list</title>
+    <style>
+        .normal {
+            color: green;
+        }
+        .exceeded {
+            color: red;
+        }
+    </style>
 </head>
 <body>
-<h3><a href="index.html">Home</a></h3>
-<c:forEach items="${meals}" var="meal">
-    <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
-    <tr>
-        <td>
-                <%--${fn:formatDateTime(meal.dateTime)}--%>
-        </td>
-        <td>
-            ${meal.description}
-        </td>
-        <td>
-            ${meal.calories}
-        </td>
-    </tr>
-</c:forEach>
+<section>
+    <h3><a href="index.html">Home</a></h3>
+    <h2>Meal list</h2>
+    <hr/>
+    <table border="0" cellpadding="8" cellspacing="0">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Calories</th>
+        </tr>
+        </thead>
+        <c:forEach items="${meals}" var="meal">
+            <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
+            <tr class="${meal.exceed ? 'exceeded' : 'normal'}">
+                <td>
+                        <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
+                        <%--<%=TimeUtil.toString(meal.getDateTime())%>--%>
+                        ${fn:formatDateTime(meal.dateTime)}
+                </td>
+                <td>${meal.description}</td>
+                <td>${meal.calories}</td>
+            </tr>
+        </c:forEach>
+    </table>
+</section>
 </body>
 </html>

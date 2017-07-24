@@ -25,9 +25,9 @@
             <td>${user.dateTime}</td>
             <td>${user.name}</td>
             <td>${user.age}</td>
-            <td><a href="users?action=update&id=${user.id}">Update</a></td>
-            <td><a href="users?action=delete&id=${user.id}">Delete</a></td>
-        </tr>
+            <%--<td><a href="users?action=update&id=${user.id}">Update</a></td>--%>
+            <%--<td><a href="users?action=delete&id=${user.id}">Delete</a></td>--%>
+        <%--</tr>--%>
 
     </c:forEach>
 </table>

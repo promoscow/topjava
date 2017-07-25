@@ -13,14 +13,18 @@ public class User {
     private final int age;
 
     public User(LocalDateTime dateTime, String name, int age) {
+        this(null, dateTime, name, age);
+    }
+
+    public User(Integer id, LocalDateTime dateTime, String name, int age) {
         this.id = id;
         this.dateTime = dateTime;
         this.name = name;
         this.age = age;
     }
 
-    public LocalDate getDateTime() {
-        return dateTime.toLocalDate();
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
     public String getName() {

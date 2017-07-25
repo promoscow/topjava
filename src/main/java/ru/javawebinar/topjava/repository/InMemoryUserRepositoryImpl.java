@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.repository;
 
 import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.util.UserUtil;
+import ru.javawebinar.topjava.util.UsersUtil;
 
 import java.util.Collection;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
 
     /** Заносим всех юзеров из хардкод-страницы в репозиторий. */
     {
-        UserUtil.USERS.forEach(this::save);
+        UsersUtil.USERS.forEach(this::save);
     }
 
     /**
@@ -35,9 +35,11 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     @Override
     public User save(User user) {
         if (user.isNew()) {
+            System.out.println("new user: " + user);
             user.setId(counter.incrementAndGet());
-            userRepo.put(user.getId(), user);
         }
+        userRepo.put(user.getId(), user);
+        System.out.println(userRepo.get(user.getId()));
         return user;
     }
 

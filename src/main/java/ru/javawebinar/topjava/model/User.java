@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -35,7 +34,7 @@ public class User {
         return age;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

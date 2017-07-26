@@ -26,4 +26,14 @@
         <url-pattern>/meals</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>botServlet</servlet-name>
+        <servlet-class>ru.javawebinar.topjava.web.BotServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>botServlet</servlet-name>
+        <url-pattern>/bots</url-pattern>
+    </servlet-mapping>
+
 </web-app>

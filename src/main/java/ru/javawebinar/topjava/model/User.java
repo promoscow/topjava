@@ -20,20 +20,30 @@ public class User extends NamedEntity {
 
     private int caloriesPerDay = DEFAULT_CALORIES_PER_DAY;
 
-    public User() {
+    public User(boolean b, Date date, Role roleUser) {
     }
 
-    public User(Integer id, String name, String email, String password, Role role, Role... roles) {
-        this(id, name, email, password, DEFAULT_CALORIES_PER_DAY, true, EnumSet.of(role, roles));
+    public User(String name, String email, String password, Role role, Role... roles) {
+        this(name, email, password, DEFAULT_CALORIES_PER_DAY, true, EnumSet.of(role, roles));
     }
 
-    public User(Integer id, String name, String email, String password, int caloriesPerDay, boolean enabled, Set<Role> roles) {
-        super(id, name);
+    public User(String name, String email, String password, int caloriesPerDay, boolean enabled, Set<Role> roles) {
         this.email = email;
         this.password = password;
         this.caloriesPerDay = caloriesPerDay;
         this.enabled = enabled;
         this.roles = roles;
+    }
+
+    public User(String s, String userName, String email, String password, Role roleAdmin) {
+        super();
+    }
+
+    public User(boolean enabled, Date registered, Set<Role> roles, int caloriesPerDay) {
+        this.enabled = enabled;
+        this.registered = registered;
+        this.roles = roles;
+        this.caloriesPerDay = caloriesPerDay;
     }
 
     public String getEmail() {

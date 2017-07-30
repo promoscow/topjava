@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.model;
 
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Set;
 
 import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
@@ -28,6 +29,7 @@ public class User extends NamedEntity {
     }
 
     public User(String name, String email, String password, int caloriesPerDay, boolean enabled, Set<Role> roles) {
+        this.name = name;
         this.email = email;
         this.password = password;
         this.caloriesPerDay = caloriesPerDay;
@@ -35,15 +37,25 @@ public class User extends NamedEntity {
         this.roles = roles;
     }
 
-    public User(String s, String userName, String email, String password, Role roleAdmin) {
+    public User(Integer id, String userName, String email, String password, Role role) {
         super();
+        this.id = id;
+        this.name = userName;
+        this.email = email;
+        this.password = password;
+        roles = new HashSet<>();
+        roles.add(role);
     }
 
     public User(boolean enabled, Date registered, Set<Role> roles, int caloriesPerDay) {
         this.enabled = enabled;
         this.registered = registered;
         this.roles = roles;
-        this.caloriesPerDay = caloriesPerDay;
+        this.caloriesPerDay = DEFAULT_CALORIES_PER_DAY;
+    }
+
+    public User() {
+
     }
 
     public String getEmail() {
@@ -101,4 +113,8 @@ public class User extends NamedEntity {
                 ", caloriesPerDay=" + caloriesPerDay +
                 ')';
     }
+
+//    public boolean isNew() {
+//        return id == null;
+//    }
 }

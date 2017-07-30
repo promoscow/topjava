@@ -15,6 +15,7 @@ public class BaseEntity {
     }
 
     public Integer getId() {
+        // TODO: 29.07.17 id increment
         return id;
     }
 

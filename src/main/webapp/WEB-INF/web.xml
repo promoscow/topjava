@@ -33,7 +33,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>botServlet</servlet-name>
-        <url-pattern>/bots</url-pattern>
+        <url-pattern>/bot</url-pattern>
     </servlet-mapping>
 
 </web-app>

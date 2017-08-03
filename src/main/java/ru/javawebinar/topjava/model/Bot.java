@@ -1,14 +1,23 @@
 package ru.javawebinar.topjava.model;
 
 /**
- * Класс Bot, экземпляры которого (объекты) мы будем создавать.
- * <p>
+ * Синглтон-класс Bot.
+ * Для чистоты эксперимента это будет синглтон.
+ *
  * Created by promoscow on 26.07.17.
  */
 public class Bot {
     private Integer id;
     private String name;
     private String serial;
+
+    private static Bot ourInstance = new Bot();
+    public static Bot getInstance() {
+        return ourInstance;
+    }
+
+    private Bot() {
+    }
 
     public Bot(String name, String serial, Integer id) {
         this.name = name;

@@ -86,6 +86,7 @@ public class MealServlet extends HttpServlet {
             case "all":
             default:
                 request.setAttribute("meals", mealController.getAll());
+//                mealController.getAll().forEach(System.out::println);
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }

@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
@@ -35,9 +36,12 @@ public class MealServiceImpl implements MealService {
         return repository.getBetween(startDateTime, endDateTime, userId);
     }
 
+    // TODO: 07.08.17 inline variable when task will be completed
     @Override
     public List<Meal> getAll(int userId) {
-        return repository.getAll(userId);
+        List<Meal> all = repository.getAll(userId);
+        all.forEach(System.out::println);
+        return all;
     }
 
     @Override

@@ -11,8 +11,28 @@ public class Meal extends BaseEntity {
 
     private final int calories;
 
+    /** temporary constructor for tests */
+    // TODO: 07.08.17 delete constructor when task will be completed
+    public Meal() {
+        this.id = 100000;
+        this.dateTime = LocalDateTime.now();
+        this.description = "";
+        this.calories = 100;
+    }
+
+    public Meal(Meal m) {
+        this(m.getId(), m.getDateTime(), m.getDescription(), m.getCalories());
+    }
+
     public Meal(LocalDateTime dateTime, String description, int calories) {
         this(null, dateTime, description, calories);
+    }
+
+    public Meal(Integer id, String description, LocalDateTime dateTime, int calories) {
+        super(id);
+        this.description = description;
+        this.dateTime = dateTime;
+        this.calories = calories;
     }
 
     public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {

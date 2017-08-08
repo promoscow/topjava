@@ -39,9 +39,7 @@ public class MealServiceImpl implements MealService {
     // TODO: 07.08.17 inline variable when task will be completed
     @Override
     public List<Meal> getAll(int userId) {
-        List<Meal> all = repository.getAll(userId);
-        all.forEach(System.out::println);
-        return all;
+        return repository.getAll(userId);
     }
 
     @Override

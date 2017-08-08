@@ -18,13 +18,16 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 @Repository
 public class JdbcMealRepositoryImpl implements MealRepository {
 
-    private static final BeanPropertyRowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
+//    private static final BeanPropertyRowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -63,31 +66,30 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        return jdbcTemplate.update("DELETE FROM meals WHERE id=?", id) != 0;
+        return jdbcTemplate.update("DELETE FROM meals WHERE id = ? AND userid = ?", id, userId) != 0;
     }
 
-    // TODO: 08.08.17 !!! по id и userId! сделать проверку на userId
     @Override
     public Meal get(int id, int userId) {
-        return jdbcTemplate.queryForObject("SELECT * FROM meals WHERE id = ?", (rs, rowNum) -> {
+        return jdbcTemplate.queryForObject("SELECT * FROM meals WHERE id = ? AND userid = ?", (rs, rowNum) -> {
             return new Meal(rs.getInt("id"), rs.getString("description"), LocalDateTime
                     .ofInstant(rs.getTimestamp("datetime").toInstant(), TimeZone.getDefault().toZoneId()), rs.getInt("calories"));
-        }, id);
+        }, id, userId);
     }
 
-    // TODO: 08.08.17 сортировка по дате, последние вверху
     @Override
     public List<Meal> getAll(int userId) {
-        return jdbcTemplate.query("SELECT * FROM meals WHERE userid=?", (rs, rowNum) -> {
+        return jdbcTemplate.query("SELECT * FROM meals WHERE userid = ?", (rs, rowNum) -> {
             return new Meal(rs.getInt("id"), rs.getString("description"), rs.getTimestamp("datetime").toLocalDateTime(), rs.getInt("calories"));
-        }, AuthorizedUser.id());
+        }, AuthorizedUser.id())
+                .stream().sorted(Comparator.comparing(Meal::getDateTime)).collect(Collectors.toList());
     }
 
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-            List<Meal> list = jdbcTemplate.query("SELECT * FROM meals WHERE userid=? AND datetime > ? AND meals.datetime < ?", (rs, rowNum) -> {
-            return new Meal(rs.getInt("id"), rs.getString("description"), rs.getTimestamp("datetime").toLocalDateTime(), rs.getInt("calories"));
-        }, AuthorizedUser.id(), startDate, endDate);
-        return list;
+        return jdbcTemplate.query("SELECT * FROM meals WHERE userid = ? AND datetime > ? AND meals.datetime < ?", (rs, rowNum) -> {
+        return new Meal(rs.getInt("id"), rs.getString("description"), rs.getTimestamp("datetime").toLocalDateTime(), rs.getInt("calories"));
+    }, AuthorizedUser.id(), startDate, endDate)
+                .stream().sorted(Comparator.comparing(Meal::getDateTime)).collect(Collectors.toList());
     }
 }

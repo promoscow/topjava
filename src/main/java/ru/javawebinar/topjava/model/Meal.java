@@ -13,7 +13,7 @@ import java.time.LocalTime;
 @NamedQueries({
         @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id"),
 //        @NamedQuery(name = Meal.BY_EMAIL, query = "SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.email=?1"),
-        @NamedQuery(name = User.ALL_SORTED, query = "SELECT m FROM Meal m ORDER BY m.dateTime"),
+        @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m ORDER BY m.dateTime"),
 })
 
 @Entity
@@ -24,7 +24,6 @@ public class Meal extends BaseEntity {
     public static final String ALL_SORTED = "Meal.getAllSorted";
 
     @Column(name = "date_time", columnDefinition = "timestamp default now()")
-    @NotBlank
     private LocalDateTime dateTime;
 
     @Column(name = "description")

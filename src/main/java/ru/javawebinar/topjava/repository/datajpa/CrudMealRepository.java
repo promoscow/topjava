@@ -6,7 +6,12 @@ import ru.javawebinar.topjava.model.Meal;
 import java.util.List;
 
 public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
-    List<Meal> findAll(int userId);
 
-    Meal getOne(int id, int userId);
+    List<Meal> getAllByUserId(int userId);
+
+    Meal getOneByIdAndUserId(int id, int userId);
+
+    boolean deleteByIdAndUserId(int id, int userId);
+
+    List<Meal> findAllByUserIdOrderByDateTimeDesc(int userId);
 }

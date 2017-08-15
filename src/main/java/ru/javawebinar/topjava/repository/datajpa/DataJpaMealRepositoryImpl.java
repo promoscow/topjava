@@ -21,21 +21,21 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        return false;
+        return true;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        return crudRepository.getOne(id, userId);
+        return crudRepository.getOneByIdAndUserId(id, userId);
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        return crudRepository.findAll(userId);
+        return crudRepository.getAllByUserId(userId);
     }
 
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-        return null;
+        return crudRepository.findAllByUserIdOrderByDateTimeDesc(userId);
     }
 }

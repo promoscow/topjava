@@ -6,7 +6,12 @@ public class Profiles {
             JPA = "jpa",
             DATAJPA = "datajpa";
 
-    public static final String REPOSITORY_IMPLEMENTATION = DATAJPA;
+    public static final String REPOSITORY_IMPLEMENTATION = getActiveImplementation();
+
+    // TODO: 16.08.17 Наверное, здесь!
+    private static String getActiveImplementation() {
+        return DATAJPA;
+    }
 
     public static final String
             POSTGRES_DB = "postgres",

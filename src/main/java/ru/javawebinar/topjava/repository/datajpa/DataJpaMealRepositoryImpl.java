@@ -45,6 +45,11 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
+        System.out.println();
+        System.out.println("**********************");
+        System.out.println("DATAJPA IMPLEMENTATION");
+        System.out.println("**********************");
+        System.out.println();
         return crudRepository.getAllByUserId(userId)
                 .stream()
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())

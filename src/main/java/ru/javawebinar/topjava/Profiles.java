@@ -10,7 +10,7 @@ public class Profiles {
 
     // TODO: 16.08.17 Наверное, здесь!
     private static String getActiveImplementation() {
-        return DATAJPA;
+        return JPA;
     }
 
     public static final String

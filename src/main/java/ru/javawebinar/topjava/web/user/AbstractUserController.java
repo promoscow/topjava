@@ -19,12 +19,15 @@ public abstract class AbstractUserController {
 
     public List<User> getAll() {
         log.info("getAll");
-        return service.getAll();
+        List<User> list = service.getAll();
+        list.forEach(System.out::println);
+        return list;
     }
 
     public User get(int id) {
         log.info("get {}", id);
-        return service.get(id);
+        User user = service.get(id);
+        return user;
     }
 
     public User create(User user) {

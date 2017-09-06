@@ -37,19 +37,20 @@ public class MealRestController {
         this.service = service;
     }
 
-    @RequestMapping(value = "/get/{id}")
-    public String get(@PathVariable("id") int id, Model model) {
+    public Meal get(int id) {
         int userId = AuthorizedUser.id();
         log.info("get meal {} for userId={}", id, userId);
-        Meal meal = service.get(id, userId);
-        model.addAttribute("meal", meal);
-        return "mealForm";
+        return service.get(id, userId);
     }
 
-    public void delete(int id) {
+    @RequestMapping(value = "/delete/{id}")
+    public String delete(@PathVariable("id") int id, Model model) {
         int userId = AuthorizedUser.id();
         log.info("delete meal {} for userId={}", id, userId);
         service.delete(id, userId);
+        List<MealWithExceed> list = MealsUtil.getWithExceeded(service.getAll(userId), AuthorizedUser.getCaloriesPerDay());
+        model.addAttribute("meals", list);
+        return "meals";
     }
 
     @RequestMapping(value = "/meals", method = RequestMethod.GET)
@@ -58,7 +59,6 @@ public class MealRestController {
         int userId = AuthorizedUser.id();
         log.info("getAll for userId={}", userId);
         List<MealWithExceed> list = MealsUtil.getWithExceeded(service.getAll(userId), AuthorizedUser.getCaloriesPerDay());
-        list.forEach(System.out::println);
         model.addAttribute("meals", list);
         return "meals";
     }
@@ -70,14 +70,16 @@ public class MealRestController {
         return service.create(meal, userId);
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String update(HttpServletRequest request) {
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
+    public String update(@PathVariable("id") int id, Model model) {
+        Meal meal = get(id);
+        model.addAttribute("meal", meal);
+        return "mealForm";
+    }
 
-        System.out.println("***** UPDATE *****");
-        System.out.println("***** UPDATE *****");
-        System.out.println("***** UPDATE *****");
-        System.out.println("***** UPDATE *****");
-        System.out.println("***** UPDATE *****");
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String update(HttpServletRequest request, Model model) {
+
         int userId = AuthorizedUser.id();
         int id = Integer.parseInt(request.getParameter("id"));
 
@@ -88,10 +90,12 @@ public class MealRestController {
         meal.setDescription(request.getParameter("description"));
         meal.setDateTime(LocalDateTime.parse(request.getParameter("dateTime")));
 
-        System.out.println(meal);
         log.info("update {} with id={} for userId={}", meal, id, userId);
         assureIdConsistent(meal, id);
         service.update(meal, userId);
+
+        List<MealWithExceed> list = MealsUtil.getWithExceeded(service.getAll(userId), AuthorizedUser.getCaloriesPerDay());
+        model.addAttribute("meals", list);
         return "meals";
     }
 

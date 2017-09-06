@@ -52,8 +52,8 @@
                 </td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
-                <td><a href="get/${meal.id}">Update</a></td>
-                <td><a href="delete/${meal.id}">Delete</a></td>
+                <td><a href="${pageContext.request.contextPath}/update/${meal.id}">Update</a></td>
+                <td><a href="${pageContext.request.contextPath}/delete/${meal.id}">Delete</a></td>
             </tr>
         </c:forEach>
     </table>

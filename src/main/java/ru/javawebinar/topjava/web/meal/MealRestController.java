@@ -17,10 +17,13 @@ import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
+import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
@@ -72,7 +75,9 @@ public class MealRestController {
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
     public String update(@PathVariable("id") int id, Model model) {
-        Meal meal = get(id);
+        Meal meal = (id == -1) ? new Meal() : get(id);
+        model.addAttribute("action", (id == -1) ? "create" : "update");
+        if (meal.getDateTime() == null) meal.setDateTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         model.addAttribute("meal", meal);
         return "mealForm";
     }
@@ -81,20 +86,38 @@ public class MealRestController {
     public String update(HttpServletRequest request, Model model) {
 
         int userId = AuthorizedUser.id();
-        int id = Integer.parseInt(request.getParameter("id"));
+        Integer id = (request.getParameter("id").equals(""))
+        ? null : Integer.parseInt(request.getParameter("id"));
 
         Meal meal = new Meal();
         meal.setId(id);
         meal.setUser(new User());
+
+        /** Нуловые значения недопустимы */
         meal.setCalories(Integer.parseInt(request.getParameter("calories")));
         meal.setDescription(request.getParameter("description"));
         meal.setDateTime(LocalDateTime.parse(request.getParameter("dateTime")));
 
         log.info("update {} with id={} for userId={}", meal, id, userId);
-        assureIdConsistent(meal, id);
-        service.update(meal, userId);
+        if (id == null) {
+            create(meal);
+        }
+        else {
+            assureIdConsistent(meal, id);
+            service.update(meal, userId);
+        }
 
         List<MealWithExceed> list = MealsUtil.getWithExceeded(service.getAll(userId), AuthorizedUser.getCaloriesPerDay());
+        model.addAttribute("meals", list);
+        return "meals";
+    }
+
+    @RequestMapping(value = "/filter", method = RequestMethod.POST)
+    public String filter(HttpServletRequest request, Model model) {
+        List<MealWithExceed> list = getBetween(LocalDate.parse(request.getParameter("startDate")),
+                LocalTime.parse(request.getParameter("startTime")),
+                LocalDate.parse(request.getParameter("endDate")),
+                LocalTime.parse(request.getParameter("endTime")));
         model.addAttribute("meals", list);
         return "meals";
     }

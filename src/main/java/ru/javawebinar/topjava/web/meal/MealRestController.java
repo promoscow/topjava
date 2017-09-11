@@ -1,10 +1,9 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.MealWithExceed;
 
 import java.time.LocalDate;
@@ -16,7 +15,6 @@ import java.util.List;
 public class MealRestController extends AbstractMealController {
     static final String REST_URL = "/rest/meal";
 
-    // TODO: 09.09.17 Вернуть user в JSON-ответе
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Meal get(@RequestParam ("id") int id) {
         final Meal meal = super.get(id);
@@ -25,8 +23,8 @@ public class MealRestController extends AbstractMealController {
         return meal;
     }
 
-    @Override
-    public void delete(int id) {
+    @DeleteMapping(value = "delete")
+    public void delete(@RequestParam ("id") int id) {
         super.delete(id);
     }
 
@@ -35,17 +33,18 @@ public class MealRestController extends AbstractMealController {
         return super.getAll();
     }
 
-    @Override
-    public Meal create(Meal meal) {
+    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Meal create(@RequestBody Meal meal) {
         return super.create(meal);
     }
 
-    @Override
-    public void update(Meal meal, int id) {
-        super.update(meal, id);
+    @PostMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void update(@RequestBody Meal meal) {
+        super.update(meal, meal.getId());
     }
 
-    @Override
+    @PostMapping(value = "/filter", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     public List<MealWithExceed> getBetween(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
         return super.getBetween(startDate, startTime, endDate, endTime);
     }

@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
@@ -34,7 +35,8 @@ public class MealAjaxController extends AbstractMealController {
 
     @PostMapping
     public void createOrUpdate(@RequestParam(value = "id", required = false) Integer id,
-                               @RequestParam(value = "dateTime", required = false) LocalDateTime dateTime,
+                               @RequestParam(value = "dateTime", required = false)
+                               @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
                                @RequestParam(value = "description", required = false) String description,
                                @RequestParam(value = "calories", required = false) int calories) {
         Meal meal = new Meal(id, dateTime, description, calories);
@@ -47,7 +49,12 @@ public class MealAjaxController extends AbstractMealController {
 
 
     @Override
-    public List<MealWithExceed> getBetween(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
+    @GetMapping(value = "/filter")
+    public List<MealWithExceed> getBetween(
+            @RequestParam(value = "startDate", required = false) LocalDate startDate,
+            @RequestParam(value = "startTime", required = false) LocalTime startTime,
+            @RequestParam(value = "endDate", required = false) LocalDate endDate,
+            @RequestParam(value = "endTime", required = false) LocalTime endTime) {
         return super.getBetween(startDate, startTime, endDate, endTime);
     }
 }

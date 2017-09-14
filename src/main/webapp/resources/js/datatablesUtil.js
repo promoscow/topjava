@@ -14,6 +14,11 @@ function makeEditable() {
 
     // solve problem with cache in IE: https://stackoverflow.com/a/4303862/548473
     $.ajaxSetup({cache: false});
+
+    $("#filter-form").submit(function() {
+        getBetween();
+        return false;
+    })
 }
 
 function add() {
@@ -78,4 +83,22 @@ function failNoty(event, jqXHR, options, jsExc) {
         type: "error",
         layout: "bottomRight"
     }).show();
+}
+
+function filter() {
+    $("#filter-form").find(":input").val("");
+    $("#filter-modal").modal();
+}
+
+function getBetween() {
+    var form = $("#filter-form");
+    $.ajax({
+        type: "GET",
+        url: ajaxUrl + "/filter",
+        data: form.serialize(),
+        success: function () {
+            updateTable();
+            successNoty("Get between");
+        }
+    });
 }

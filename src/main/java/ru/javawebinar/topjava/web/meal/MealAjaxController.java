@@ -47,7 +47,6 @@ public class MealAjaxController extends AbstractMealController {
         }
     }
 
-
     @Override
     @GetMapping(value = "/filter")
     public List<MealWithExceed> getBetween(

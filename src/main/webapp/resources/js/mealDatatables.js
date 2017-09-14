@@ -1,8 +1,8 @@
-var ajaxUrl = "ajax/meals";
+var ajaxUrl = "ajax/meals/";
 var datatableApi;
 
 $(function() {
-    datatableApi = $("mealDataTable").DataTable({
+    datatableApi = $("#datatable").DataTable({
         "paging": false,
         "info": true,
         "columns": [
